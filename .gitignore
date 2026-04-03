@@ -6,6 +6,9 @@ nbproject/
 ### Node ###
 node_modules/
 
+### Build ###
+dist/
+
 ### General ###
 *.log
 

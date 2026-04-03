@@ -1,12 +1,10 @@
 # Directed Acyclic Graph
 
-This is a simple implementation of a Directed Acyclic Graph (DAG) in TypeScript.
-The library provides basic functionalities to create nodes,
-add edges, and perform topological sorting.
+[![codecov](https://codecov.io/gh/hschulz/directed-acyclic-graph/branch/master/graph/badge.svg)](https://codecov.io/gh/hschulz/directed-acyclic-graph)
+
+A simple Directed Acyclic Graph (DAG) implementation in TypeScript with support for cycle detection, topological sorting, and path finding.
 
 ## Installation
-
-You can install the library in your project using npm:
 
 ```bash
 npm install @hschulz/directed-acyclic-graph
@@ -15,44 +13,52 @@ npm install @hschulz/directed-acyclic-graph
 ## Usage
 
 ```typescript
-import { DAG } from '.'
+import { DAG } from '@hschulz/directed-acyclic-graph'
 
-// Create a new Directed Acyclic Graph
 const dag = new DAG<string>()
 
 // Add nodes
-try {
-    dag.addNode("A")
-    dag.addNode("B")
-    dag.addNode("C")
-    dag.addNode("D")
-} catch (error) {
-    console.error('Error adding nodes:', error)
-}
+dag.addNode("A")
+dag.addNode("B")
+dag.addNode("C")
+dag.addNode("D")
 
 // Add edges
-try {
-    dag.addEdge("A", "B")
-    dag.addEdge("B", "C")
-    dag.addEdge("A", "D")
-    // dag.addEdge("A", "C") // This will throw an error because it creates a cycle
-    // dag.addEdge("D", "D") // This will throw an error because it creates a cycle
-} catch (error) {
-    console.error('Error adding edges:', error)
-}
+dag.addEdge("A", "B")
+dag.addEdge("B", "C")
+dag.addEdge("A", "D")
 
-// Find a path from nodeA to nodeC
+// Find a path between nodes
 const path = dag.findPath("A", "C")
+console.log(path) // ["A", "B", "C"]
 
-// Output: Path from A to C: [ 'A', 'B', 'C' ]
-console.log('Path from A to C:', path)
-
-// Sorting the nodes in topological order
+// Topological sort
 const sorted = dag.topologicalSort()
-
-// Output: Topological sort: [ 'A', 'D', 'C', 'B' ]
-console.log('Topological sort:', sorted)
+console.log(sorted) // ["A", "D", "B", "C"]
 ```
 
+## API
+
+### `DAG<T>`
+
+| Method | Description |
+| --- | --- |
+| `addNode(value: T)` | Adds a node to the graph. Throws if the node already exists. |
+| `removeNode(value: T)` | Removes a node and all connected edges. Throws if the node does not exist. |
+| `getNode(value: T)` | Returns the node or `undefined`. |
+| `addEdge(from: T, to: T)` | Adds a directed edge. Throws if a cycle would be created. |
+| `topologicalSort()` | Returns node values in topological order. |
+| `findPath(from: T, to: T)` | Returns the path between two nodes or an empty array. |
+
+### `Node<T>`
+
+| Property / Method | Description |
+| --- | --- |
+| `value: T` | The value of the node. |
+| `edges: Set<Node<T>>` | The set of outgoing edges. |
+| `addEdge(node: Node<T>)` | Adds an edge to another node. |
+| `removeEdge(node: Node<T>)` | Removes an edge to another node. |
+
 ## License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
